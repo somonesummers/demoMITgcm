@@ -22,6 +22,10 @@ core
 # OSX system files
 .DS_store
 
+/verification/*/Report*
+/verification/*/results/*
+/verification/*/figs/*
+
 /doc/_build/
 
 /eesupp/src/exch_xy_r[ls48].F
