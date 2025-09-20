@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # coding: utf-8
-# Paul Summers, April 2025
-# Script for generating MITgcm setup for coupling with MELANGE1D
-# Including seasonal forcing of plume for now, BCs also enabled
+# Paul Summers, September 2025
+# Script for generating MITgcm setup for idealized fjord
+# Including forcing of plume, icebergs, BCs also enabled
 
 import os
 import numpy as np
@@ -343,9 +343,9 @@ params02['cg3dTargetResidual'] = 1e-8
 
 # time stepping parameters 
 params03 = {}
-params03['dumpInitAndLast'] = False  #Reduce number of dumped files
+params03['dumpInitAndLast'] = False  #Reduce number of dumped files, no state vars saved
 params03['nIter0'] = 0
-#params03['endTime'] = 864000.0
+#params03['endTime'] = 864000.0 # This is set elsewhere
 deltaT = 25
 params03['abEps'] = 0.1
 
@@ -1105,7 +1105,7 @@ if(run_config['make_icebergs']):
         icebergs_widths2D[:,j,i] = icebergs_widths[k,:]
         icebergs_length2D[:,j,i] = icebergs_length[k,:]
 
-    if(forceDraft):
+    if(forceDraft): #need a reference melange to do this
         mX=np.load(run_config['run_dir']+'/input/melangeX.npy')
         mH=np.load(run_config['run_dir']+'/input/melangeH.npy')
         x_fd = np.arange(deltaX/2,deltaX*(nx+.5),deltaX)

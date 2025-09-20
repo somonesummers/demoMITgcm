@@ -7,12 +7,13 @@ set -e
 #export MANPATH=$MANPATH:$PGI/linux86-64/24.5/compilers/man
 #export LM_LICENSE_FILE=$PGI/license/LICENSE.txt
 if [ $# -lt 1 ]; then
-  echo 1>&2 "$0: not enough arguments, need to specifiy path to MITgcm from build location"
-  exit 2
+  echo 1>&2 "$0: assuming root location of ../../.."
+  ROOT="../../.."
+else
+  ROOT=$1
+  OPT2=$2
 fi
 
-ROOT=$1
-OPT2=$2
 
 unameOut="$(uname -s)"
 case "${unameOut}" in

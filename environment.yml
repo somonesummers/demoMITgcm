@@ -11,8 +11,16 @@ dependencies:
   - bzip2=1.0.8=h80987f9_6
   - ca-certificates=2025.9.9=hca03da5_0
   - cairo=1.18.4=h191e429_0
+  - cctools=1021.4=h01d68c5_0
+  - cctools_osx-arm64=1021.4=h356c9db_1
+  - clang=20.1.8=h71b10da_0
+  - clang-20=20.1.8=default_h988c893_0
+  - clang_impl_osx-arm64=20.1.8=h05252e2_0
+  - clang_osx-arm64=20.1.8=hf3c1794_0
   - cmocean=4.0.3=pyhd8ed1ab_1
   - colorspacious=1.1.2=pyhecae5ae_1
+  - compiler-rt=20.1.8=hf790f37_0
+  - compiler-rt_osx-arm64=20.1.8=hf790f37_0
   - contourpy=1.3.3=py313hc50a443_2
   - cycler=0.12.1=pyhd8ed1ab_1
   - dav1d=1.2.1=h80987f9_0
@@ -31,10 +39,14 @@ dependencies:
   - freetype=2.14.1=hce30654_0
   - fribidi=1.0.10=h1a28f6b_0
   - gdk-pixbuf=2.44.1=h7542897_0
+  - gfortran=15.1.0=h3ef1dbf_0
+  - gfortran_impl_osx-arm64=15.1.0=h8f8a10e_1
+  - gfortran_osx-arm64=15.1.0=h3c33bd0_0
   - ghostscript=10.04.0=hf9b8971_0
   - giflib=5.2.2=h80987f9_0
   - glib=2.86.0=h52a91e1_0
   - glib-tools=2.86.0=hb9d6e3a_0
+  - gmp=6.3.0=h313beb8_0
   - graphite2=1.3.14=hc377ac9_1
   - graphviz=13.1.2=hcd33d8b_0
   - gsw=3.6.20=py313h2732efb_0
@@ -44,9 +56,12 @@ dependencies:
   - hicolor-icon-theme=0.17=hca03da5_2
   - icu=75.1=hfee45f7_0
   - imagemagick=7.1.2_3=imagemagick_h73ce9b5_0
+  - isl=0.26=imath32_h347afa1_101
   - jbig=2.1=h1a28f6b_0
   - kiwisolver=1.4.9=py313hf88c9ab_1
   - lcms2=2.17=h7eeda09_0
+  - ld64=954.16=hbcf198d_0
+  - ld64_osx-arm64=954.16=hc3387fa_1
   - lerc=4.0.0=hd64df32_1
   - libavif16=1.3.0=hb06b76e_2
   - libblas=3.9.0=35_h51639a9_openblas
@@ -54,6 +69,7 @@ dependencies:
   - libbrotlidec=1.1.0=h6caf38d_4
   - libbrotlienc=1.1.0=h6caf38d_4
   - libcblas=3.9.0=35_hb0561ab_openblas
+  - libclang-cpp20.1=20.1.8=default_h988c893_0
   - libcxx=20.1.8=h8869778_0
   - libde265=1.0.15=h2ffa867_0
   - libdeflate=1.22=hd74edd7_0
@@ -63,6 +79,7 @@ dependencies:
   - libfreetype6=2.14.1=h6da58f4_0
   - libgd=2.3.3=hb2c3a21_11
   - libgfortran=15.1.0=hfdf1602_1
+  - libgfortran-devel_osx-arm64=15.1.0=hfdf1602_1
   - libgfortran5=15.1.0=hb74de2c_1
   - libglib=2.86.0=h1bb475b_0
   - libheif=1.19.7=gpl_h79e6334_100
@@ -71,6 +88,7 @@ dependencies:
   - libintl-devel=0.25.1=h493aca8_0
   - libjpeg-turbo=3.1.0=h5505292_0
   - liblapack=3.9.0=35_hd9741b5_openblas
+  - libllvm20=20.1.8=h1701f07_0
   - liblzma=5.8.1=h39f12f2_2
   - liblzma-devel=5.8.1=h39f12f2_2
   - libmpdec=4.0.0=h80987f9_0
@@ -84,7 +102,11 @@ dependencies:
   - libxml2=2.13.8=h4a9ca0c_1
   - libzlib=1.3.1=h5f15de7_0
   - llvm-openmp=20.1.8=hbb9b287_2
+  - llvm-tools=20.1.8=hf790f37_0
+  - llvm-tools-20=20.1.8=h1e49d39_0
   - matplotlib-base=3.10.6=py313h58042b9_1
+  - mpc=1.3.1=h80987f9_0
+  - mpfr=4.2.1=h80987f9_0
   - munkres=1.1.4=pyhd8ed1ab_1
   - ncurses=6.5=hee39554_0
   - numpy=2.3.3=py313h9771d21_0
@@ -107,9 +129,11 @@ dependencies:
   - readline=8.3=h0b18652_0
   - scipy=1.16.2=py313h0d10b07_0
   - setuptools=78.1.1=py313hca03da5_0
+  - sigtool=0.1.3=h44b9a77_0
   - six=1.17.0=pyhe01879c_1
   - sqlite=3.50.2=h79febb2_1
   - svt-av1=3.1.2=h12ba402_0
+  - tapi=1300.6.5=h03f4b80_0
   - tk=8.6.15=hcd8a7d5_0
   - tzdata=2025b=h04d1e81_0
   - wheel=0.45.1=py313hca03da5_0
