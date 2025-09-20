@@ -38,7 +38,7 @@ python ../giflookSideAvg.py
 python ../giflookMap.py -z -100 -s
 python ../giflookXSlice.py -x 9000
 
-	This will run plotting, saving figures to the figs/ folder. The first plots the side 	view of the fjord averaged across flow. The second plots a map view at depth of -100 meters, with a shadow for ice bergs (-s for shadow). The third plots an across fjord slide at 9000 meters away from the glacier.
+	This will run plotting, saving figures to the figs/ folder. The first plots the side 	view of the fjord averaged across flow. The second plots a map view at depth of -100 meters, with a shadow for ice bergs (-s for shadow). The third plots an across fjord slide at 9000 meters away from the glacier. You can add "-q" to only save pngs of the final timestep or "-qq" to only save pngs and view the images in the matplotlib native figure viewer. 
 	
 
 	
