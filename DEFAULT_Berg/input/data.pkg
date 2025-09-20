@@ -1,0 +1,8 @@
+# Packages
+ &PACKAGES
+ useICEBERG=.TRUE.,
+ useDiagnostics=.TRUE.,
+ useICEPLUME=.TRUE.,
+ useOBCS=.TRUE.,
+ usePTRACERS=.TRUE.,
+ &

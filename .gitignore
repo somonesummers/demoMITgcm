@@ -26,6 +26,8 @@ core
 /verification/*/results/*
 /verification/*/figs/*
 
+/experiments/*
+
 /doc/_build/
 
 /eesupp/src/exch_xy_r[ls48].F

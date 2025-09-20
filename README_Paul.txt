@@ -9,3 +9,7 @@ conda env create -f environment.yml
 
 press 'y' and you should be good to go!
 
+
+(if you want to save your new env, you can use 
+	conda env export | grep -v "^prefix: " > environment.yml
+)

@@ -37,6 +37,7 @@ dependencies:
   - glib-tools=2.86.0=hb9d6e3a_0
   - graphite2=1.3.14=hc377ac9_1
   - graphviz=13.1.2=hcd33d8b_0
+  - gsw=3.6.20=py313h2732efb_0
   - gtk3=3.24.43=h07173f4_5
   - gts=0.7.6=hde733a8_3
   - harfbuzz=11.5.0=haf38c7b_0
@@ -104,6 +105,7 @@ dependencies:
   - qhull=2020.2=h420ef59_5
   - rav1e=0.7.1=h0716509_3
   - readline=8.3=h0b18652_0
+  - scipy=1.16.2=py313h0d10b07_0
   - setuptools=78.1.1=py313hca03da5_0
   - six=1.17.0=pyhe01879c_1
   - sqlite=3.50.2=h79febb2_1

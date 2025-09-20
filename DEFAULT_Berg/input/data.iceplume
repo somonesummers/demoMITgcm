@@ -1,0 +1,30 @@
+# ***************
+# ICEPLUME
+# ***************
+
+# For plume:
+ &ICEPLUME_PARM01
+ runoffVelfile = 'runoffVel.bin'
+ runoffRadfile = 'runoffRad.bin'
+ plumeMaskFile = 'plumeMask.bin'
+ usePlumeDiagnostics=.TRUE.,
+ conserveMass = .FALSE.,
+ T_sg = 0.001,
+ S_sg = 0.001,
+ iceTemp=-10.,
+ backgroundVel=0.04,
+ E_0=0.10,
+ GamT=0.088,
+ GamS=0.00248,
+ &
+
+ &ICEPLUME_PARM02
+# applyIceplumeTendT=.TRUE.,
+# applyIceplumeTendS=.TRUE.,
+ &
+
+ &ICEPLUME_PARM03
+ ptracerMaskFile='pTracerMask.bin'
+ useInputPtracers=.TRUE.,
+
+ &
