@@ -9,7 +9,15 @@ case "${unameOut}" in
 esac
 echo "Idenitfied machine as ${MACHINE}"
 echo "Already built: clean up run folder, then make simlinks and run"
-cd results
+
+if [ -d results ]; then
+	cd results
+else
+	echo "results folder missing, making now"
+	mkdir results
+	cd results
+fi
+
 touch test.txt #this ensures the dir is not empty (rm -f * also probably works, but hey if it ain't broke, don't fix it)
 rm *
 ln -s ../input/* .
