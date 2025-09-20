@@ -180,8 +180,17 @@ for k in kList:
         if(isBerg):
             dataBergs = mds.rdmds("results/BRGFlx",i)
             if(dataBergs.shape[0] == 6):
-                openFrac = dataBergPlot = dataBergs[5,:,:,:] #directly saved for these runs
-                oldAveraging = False
+                # print('ttest')
+                openFrac[:,:,:] = dataBergs[5,:,:,:] #directly saved for these runs
+                for jj in range(np.shape(x)[0]): #clean up non-berg parts of this mask
+                    for ii in range(np.shape(x)[1]):
+                        if bergMask[jj,ii] == 0:
+                            openFrac[:,jj,ii] = 1
+                        if topo[jj,ii] == 0 and ii > 1:
+                            openFrac[:,jj,ii] = 0 #zero weight non-ocean cell
+                # print(np.sum(openFrac[1,:,:],axis=0))
+                # print(np.sum(openFrac2[1,:,:],axis=0))
+                # oldAveraging = False
         if(args.shadow > 0): #enable berg shadows here
             if(dataBergs.shape[0] < 6):
                 dataBergPlot = dataBergs[0,:,:,:]
@@ -223,7 +232,7 @@ for k in kList:
             cp = plt.pcolormesh(
                 np.squeeze(x[0,:]),
                 np.squeeze(z),
-                np.squeeze(np.average(data[kk, :, 1:-1, :], weights=openFrac[:,1:-1,:],axis=1)),
+                np.squeeze(np.average(data[kk, :, 1:-1, :], weights=openFrac[:,:,:],axis=1)),
                 cmap=cm,
                 vmin=np.min(lvl),
                 vmax=np.max(lvl),
@@ -232,7 +241,7 @@ for k in kList:
             cp = plt.contourf(
                 np.squeeze(x[0,:]),
                 np.squeeze(z),
-                np.squeeze(np.average(data[kk, :, 1:-1, :], weights=openFrac[:,1:-1,:],axis=1)),
+                np.squeeze(np.average(data[kk, :,:, :], weights=openFrac[:,:,:],axis=1)),
                 lvl,
                 extend="both",
                 cmap=cm,
@@ -244,9 +253,9 @@ for k in kList:
             cp2 = plt.contourf(
                 x[0,:],
                 np.squeeze(z),
-                np.squeeze(np.nanmean(dataBergPlot[:, 1:-1, :],axis=1)),
+                np.squeeze(np.nanmean(dataBergPlot[:, :, :],axis=1)),
                 [.4,.6,.8,.9,.95],
-                extend="both",
+                extend="min",
                 alpha=.2,
                 cmap='cmo.gray')
             #cbar2 = plt.colorbar(cp2)

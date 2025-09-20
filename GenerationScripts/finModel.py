@@ -434,7 +434,7 @@ else:
 #---------specify time averaged fields------#
 # NOTE: many more options available see mitgcm docs
 diag_fields_avg = [['THETA','SALT','UVEL','WVEL','VVEL'],
-                    ['BRGfwFlx','BRGhtFlx','BRGmltRt','BRG_TauX','BRG_TauY'],
+                    ['BRGfwFlx','BRGhtFlx','BRGmltRt','BRG_TauX','BRG_TauY','BRGhFacC'],
                     ['icefrntW','icefrntT','icefrntS','icefrntA','icefrntR'],
                     ['TRAC01','TRAC02']
                     ]
