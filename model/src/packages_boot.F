@@ -94,7 +94,9 @@ C     data.pkg namelists
      &          useMNC,
      &          useRunClock,
      &          useEMBED_FILES,
-     &          useMYPACKAGE
+     &          useMYPACKAGE,
+     &          useICEPLUME,
+     &          useICEBERG
 
       _BEGIN_MASTER(myThid)
 
@@ -160,6 +162,8 @@ c     useGAD          =.FALSE.
       useRunClock     =.FALSE.
       useEMBED_FILES  =.FALSE.
       useMYPACKAGE    =.FALSE.
+      useICEPLUME     =.FALSE.
+      useICEBERG      =.FALSE.
 
 C-    Adjust default to account for pkgs without run-time On/Off switch
 #ifdef ALLOW_AUTODIFF

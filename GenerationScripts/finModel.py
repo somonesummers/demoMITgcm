@@ -86,9 +86,9 @@ run_config['ndays'] = 1 # simulation time (days)
 run_config['test'] = False # if True, run_config['nyrs'] will be shortened to a few time steps
 
 wallWidthInd = 2 #width of walls in units of dy
-run_config['horiz_res_m'] = 400 # horizontal grid spacing (m)
-run_config['Lx_m'] = 32000 # domain size in x (m)
-run_config['Ly_m'] = 3200 + (2 * wallWidthInd * run_config['horiz_res_m']) # domain size in y (m) with walls (1 wall each side)
+run_config['horiz_res_m'] = 500 # horizontal grid spacing (m)
+run_config['Lx_m'] = 30000 # domain size in x (m)
+run_config['Ly_m'] = 4000 + (2 * wallWidthInd * run_config['horiz_res_m']) # domain size in y (m) with walls (1 wall each side)
 # NOTE: the number of grid points in x and y should be multiples of the number of cpus.
 run_config['terminus_m'] = 600
 terminus_index = int(run_config['terminus_m']/run_config['horiz_res_m'])
@@ -344,9 +344,9 @@ params02['cg3dTargetResidual'] = 1e-8
 # time stepping parameters 
 params03 = {}
 params03['dumpInitAndLast'] = False  #Reduce number of dumped files
-params03['nIter0'] = 1
+params03['nIter0'] = 0
 #params03['endTime'] = 864000.0
-deltaT = 15
+deltaT = 25
 params03['abEps'] = 0.1
 
 #if run_config['testing']:
@@ -1327,8 +1327,8 @@ if(makeDirs):
     os.makedirs("%s/couplingResults" %run_config['run_dir'], exist_ok=True)
     os.makedirs("%s/figs" %run_config['run_dir'], exist_ok=True)
     os.system("cp ../experiments/melangeModelExample.py %s/melangeModel.py" %run_config['run_dir'])
-    os.system("ln -s ../experiments/makeBuild.sh %s" %run_config['run_dir'])
-    os.system("ln -s ../experiments/makeRun.sh %s" %run_config['run_dir'])
+    os.system("ln -s ../makeBuild.sh %s" %run_config['run_dir'])
+    os.system("ln -s ../makeRun.sh %s" %run_config['run_dir'])
     
     if os.path.isfile(run_config['run_dir']+'/input/setupReport.txt'):   
         os.remove(run_config['run_dir']+'/input/setupReport.txt')

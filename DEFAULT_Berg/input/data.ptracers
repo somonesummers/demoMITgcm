@@ -2,5 +2,5 @@
  # | PTRACERS parameters | 
  # ========================== 
  &PTRACERS_PARM01
- PTRACERS_Iter0=1
+ PTRACERS_Iter0=0
  &

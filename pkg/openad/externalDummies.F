@@ -14,7 +14,7 @@ C ###########################################################
       _RL     myTime
       INTEGER myIter
       INTEGER myThid
-C dummy self dependence (nontrivial so mfef90 doesn't kill it)
+C dummy self dependence (nontrivial so mfef90 doesnt kill it)
       theta(1,1,1,1,1)=2*theta(1,1,1,1,1)
       end subroutine
 C ###########################################################
@@ -36,7 +36,7 @@ C ###########################################################
       INTEGER exchWidthY
       INTEGER cornerMode
       INTEGER myThid
-C dummy self dependence (nontrivial so mfef90 doesn't kill it)
+C dummy self dependence (nontrivial so mfef90 doesnt kill it)
       array(1,1,1,1,1)=2*array(1,1,1,1,1)
       end subroutine
 C ###########################################################
@@ -83,7 +83,7 @@ C#include "EESUPPORT.h"
 C#include "EXCH.h"
 C      Real*8 sumPhi
 C      INTEGER myThid
-CC dummy self dependence (nontrivial so mfef90 doesn't kill it)
+CC dummy self dependence (nontrivial so mfef90 doesnt kill it)
 C      sumPhi=2*sumPhi
 C      end subroutine
 C ###########################################################
@@ -99,7 +99,7 @@ C ###########################################################
       _RL phiTile(nSx,nSy)
       _RL sumPhi
       INTEGER myThid
-C dummy self dependence (nontrivial so mfef90 doesn't kill it)
+C dummy self dependence (nontrivial so mfef90 doesnt kill it)
       sumPhi=2*phiTile(1,1)
       end subroutine
 C ###########################################################
@@ -126,7 +126,7 @@ C ###########################################################
       INTEGER numIters
       INTEGER nIterMin
       INTEGER myThid
-C dummy self dependence (nontrivial so mfef90 doesn't kill it)
+C dummy self dependence (nontrivial so mfef90 doesnt kill it)
       cg2d_x(1,1,1,1)=2*cg2d_b(1,1,1,1)
       end subroutine
 #endif
