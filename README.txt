@@ -44,6 +44,8 @@ python ../giflookMap.py -z -100 -s
 python ../giflookXSlice.py -x 9000
 
 	This will run plotting, saving figures to the figs/ folder. The first plots the side view of the fjord, averaged across the fjord. The second plots a map view at depth of -100 meters, with a shadow for ice bergs (-s for shadow). The third plots an across fjord slide at 9000 meters (-x 9000) away from the glacier. You can add "-q" to only save pngs of the final timestep or "-qq" to only save pngs and view the images in the matplotlib native figure viewer. "-h" will show you the full options for these files. They load some defaults from files in "input/plotHelper.py" like the colorbar values. You can change those within that file (input/plotHelper.py) if you'd like.
+
+If you find this fun, you can change the input/data file to have an endTime of 864000 (10 days in seconds). If you makeRun (no need to makeBuild again) it will now take around 5 minutes to run, but after 10 days you can see the 2 layer outflow from the plume/bergs separating. You will have to make the figures again to see this.
 	
 
 	
