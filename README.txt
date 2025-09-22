@@ -11,7 +11,7 @@ You must install conda or miniconda (https://docs.conda.io/projects/conda/en/sta
 	
 conda env create -f environment.yml
 
-	This will install a new conda env, if it fails try to resolve these things, but hopefully it'll say it was successful. 
+	This will install a new conda env, if it fails try to resolve these things, but hopefully it'll say it was successful. It this fails, please see my tips at the very bottom
 
 (if you want to re-save your new env, you can use 
 	conda env export | grep -v "^prefix: " > environment.yml
@@ -27,7 +27,7 @@ cd GenerationScripts
 
 python finModel.py
 
-	This is how you run the generator script. It will ask you to confirm the description. It will then produce numerous plots confirming to you what is being created. 
+	This is how you run the generator script. It will ask you to confirm the description. It will then produce numerous plots confirming to you what is being created. You must close these plots to keep going.  
 
 cd ../experiments/bergDemo
 
@@ -49,3 +49,22 @@ If you find this fun, you can change the input/data file to have an endTime of 8
 	
 
 	
+IF CONDA FAILED WHEN LOADING MY ENV:
+	Here are instructions for manually making a similar env. 
+	You should make a new blank conda env, and then activate it
+
+conda create --name demo
+	
+	You may have to reply 'y' here to continue
+
+conda activate demo
+
+	Then installing these packages via command line:
+
+conda install anaconda::python conda-forge::matplotlib conda-forge::gfortran conda-forge::imagemagick conda-forge::gsw conda-forge::cmocean conda-forge::scipy
+
+	again you may have to reply 'y' to continue	
+
+pip install MITgcmutils
+
+Once those are all successful I believe you can now run everything! 
