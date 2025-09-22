@@ -37,7 +37,7 @@ bash makeBuild.sh
 bash makeRun.sh
 
 	This builds, (which will return many warnings and comments) then runs (which also has a few warnings). When done with building and/or running you'll hear some funk sounds and get a happy ascii art face (aka (⌐■_■) ). 
-Running should report "STOP NORMAL END" when done. 
+	Running should report "STOP NORMAL END" when done, as well as some stats on how long it took to run. 
 
 python ../giflookSideAvg.py
 python ../giflookMap.py -z -100 -s
