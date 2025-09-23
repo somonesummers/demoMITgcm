@@ -65,8 +65,11 @@ email = 'INSERT@EXAMPLE.edu'
 # set high level run configurations
 
 briefSummaryOfExp = """
-finModel is a smaller verion of a fjord for running on mac locally
+finModelMPI is a smaller verion of a fjord for running on mac locally
+MPI version is for MPI running on 8 cores. Use '-mpi' flag on makeBuild.sh and '-mpi 8' on makeRun.sh
 
+A note to you, this is still a very small domain, so MPI actually isn't that much faster. Increasing the 
+domain size or resolution is possible on 8 cores which we've done, I'd encourage you to experiment more. 
 Use icebergs and a subglacial plume
 
 You should only have to build, then run.
@@ -80,19 +83,19 @@ setUpPrint('====== Welcome to the mélange building script =====')
 
 run_config = {}
 grid_params = {}
-run_config['ncpus_xy'] = [1,1] # cpu distribution in the x and y directions
-run_config['run_name'] = 'bergDemo'
+run_config['ncpus_xy'] = [4,2] # cpu distribution in the x and y directions
+run_config['run_name'] = 'bergDemoMPI'
 run_config['ndays'] = 1 # simulation time (days)
 run_config['test'] = False # if True, run_config['nyrs'] will be shortened to a few time steps
 
 wallWidthInd = 2 #width of walls in units of dy
-run_config['horiz_res_m'] = 500 # horizontal grid spacing (m)
+run_config['horiz_res_m'] = 250 # horizontal grid spacing (m)
 run_config['Lx_m'] = 30000 # domain size in x (m)
 run_config['Ly_m'] = 4000 + (2 * wallWidthInd * run_config['horiz_res_m']) # domain size in y (m) with walls (1 wall each side)
 # NOTE: the number of grid points in x and y should be multiples of the number of cpus.
 run_config['terminus_m'] = run_config['horiz_res_m']
 terminus_index = int(run_config['terminus_m']/run_config['horiz_res_m'])
-grid_params['Nr'] = 28 # num of z-grid points
+grid_params['Nr'] = 32 # num of z-grid points
 
 run_config['make_icebergs'] = True # Do we make bergs? No if running from spin-up
 
@@ -1326,7 +1329,6 @@ if(makeDirs):
     #some coupling files
     os.makedirs("%s/couplingResults" %run_config['run_dir'], exist_ok=True)
     os.makedirs("%s/figs" %run_config['run_dir'], exist_ok=True)
-    os.system("cp ../experiments/melangeModelExample.py %s/melangeModel.py" %run_config['run_dir'])
     os.system("ln -s ../makeBuild.sh %s" %run_config['run_dir'])
     os.system("ln -s ../makeRun.sh %s" %run_config['run_dir'])
     
@@ -1334,7 +1336,7 @@ if(makeDirs):
         os.remove(run_config['run_dir']+'/input/setupReport.txt')
         setUpPrint('previous setupReport.txt deleted in '+ run_config['run_dir']+'/input/')
     shutil.move('setupReport.txt', run_config['run_dir']+'/input')
-    shutil.copy('finModel.py', run_config['run_dir']+'/input/buildScript.py')
+    shutil.copy('finModelMPI.py', run_config['run_dir']+'/input/buildScript.py')
     replaceAll(run_config['run_dir']+'/input/buildScript.py','makeDirs = True', 'makeDirs = False') 
     rcf.createSBATCHfile_Sherlock(run_config, cluster_params, walltime_hrs=1.2*comptime_hrs, email=email, mem_GB=1)
     setupNotes.close()
