@@ -191,7 +191,7 @@ for k in kList:
                 # print(np.sum(openFrac[1,:,:],axis=0))
                 # print(np.sum(openFrac2[1,:,:],axis=0))
                 # oldAveraging = False
-        print(np.sum(openFrac[:,:,:],axis=(0,1)))
+        # print(np.sum(openFrac[:,:,:],axis=(0,1)))
         if(args.shadow > 0): #enable berg shadows here
             if(dataBergs.shape[0] < 6):
                 dataBergPlot = dataBergs[0,:,:,:]
