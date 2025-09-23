@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
+# Script for building MITgcmuv
+# Paul Summers Sept 2025
+# invoked as:
+# bash makeBuild.sh [root dir] [-mpi]
+# Root directory is assumed to be ../../..
+# -mpi builds with for mpi running. This requires specific packages to be loaded, currently this is set up for GaTech Pace
+# root directory must be specified to use MPI option
+# MPI_HOME will need to be adjusted for local configuration. 
 set -e
 
-#module load nvhpc/24.5
-#export PGI=/usr/local/pace-apps/manual/packages/nvhpc/24.5
-#export PATH=$PGI/linux86-64/24.5/compilers/bin:$PATH
-#export MANPATH=$MANPATH:$PGI/linux86-64/24.5/compilers/man
-#export LM_LICENSE_FILE=$PGI/license/LICENSE.txt
 if [ $# -lt 1 ]; then
   echo 1>&2 "$0: assuming root location of ../../.."
   ROOT="../../.."

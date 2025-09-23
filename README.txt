@@ -61,7 +61,7 @@ conda activate demo
 
 	Then installing these packages via command line:
 
-conda install anaconda::python conda-forge::matplotlib conda-forge::gfortran conda-forge::imagemagick conda-forge::gsw conda-forge::cmocean conda-forge::scipy
+conda install anaconda::python conda-forge::matplotlib conda-forge::gfortran conda-forge::imagemagick conda-forge::gsw conda-forge::cmocean conda-forge::scipy conda-forge::openmpi
 
 	again you may have to reply 'y' to continue	
 
