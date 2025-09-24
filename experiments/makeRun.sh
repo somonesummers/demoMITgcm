@@ -34,16 +34,17 @@ cp ../build/mitgcmuv .
 
 echo "Ready to run -=三(ง ˙o˙)ว"
 
-echo "Running from  $(pwd) at $TIMENICE"
 if [ "$MACHINE" == "Mac" ];
 then
 	if [ -z $OPT1 ]; then #standard run
-	   time ./mitgcmuv > ../Report$TIME.txt
+		echo "Running from $(pwd) at $TIMENICE"
+		time ./mitgcmuv > ../Report$TIME.txt
 	elif [ $OPT1 == "-mpi" ]; then
 		if [ -z $OPT2 ]; then
 	  		echo "not enough arguments, need to specify number of cores"
 	  		exit 2
   		else
+  			echo "Running with MPI on $OPT2 cores from $(pwd) at $TIMENICE"
   			time mpirun -np $OPT2 ./mitgcmuv > Report$TIME.txt
   		fi
 	fi
@@ -57,8 +58,10 @@ then
 	afplay /System/Library/Sounds/Funk.aiff
 else
 	if [ -z $OPT1 ]; then #standard run
+		echo "Running from $(pwd) at $TIMENICE"
 		./mitgcmuv
 	elif [ $OPT1 == "-mpi" ]; then
+		echo "Running on MPI from $(pwd) at $TIMENICE"
 		srun ./mitgcmuv
 	else
 		echo "invalid argument: $OPT1"

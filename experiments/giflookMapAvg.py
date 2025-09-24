@@ -96,6 +96,7 @@ y = mds.rdmds("results/YC")
 # x = mds.rdmds("results/XC")-8000
 x = mds.rdmds("results/XC")
 z = mds.rdmds("results/RC")
+dz = np.load("results/dz.npy")
 
 if(os.path.isfile('input/bathymetry.bin')):
     topo = np.fromfile('input/bathymetry.bin', dtype='>f8')
@@ -193,11 +194,11 @@ for k in kList:
         else:
             dataTmp = data[kk, :, :, :]
         if(fullDepth):
-            dataPlot = np.nanmean(dataTmp,axis=0)
+            dataPlot = np.average(dataTmp,weights=dz,axis=0)
         elif(avgAbove):
-            dataPlot = np.nanmean(dataTmp[:zSlice,:,:],axis=0)
+            dataPlot = np.average(dataTmp[:zSlice,:,:],weights=dz[:zSlice],axis=0)
         else:
-            dataPlot = np.nanmean(dataTmp[zSlice:,:,:],axis=0)
+            dataPlot = np.average(dataTmp[zSlice:,:,:],weights=dz[zSlice:],axis=0)
         plt.figure(figsize=(10, 4))
         if(usePcolor):
             cp = plt.pcolormesh(
@@ -238,14 +239,14 @@ for k in kList:
             downSampleX = 5
             downSampleY = 3
             if(fullDepth):
-                u = np.nanmean((dataQuiv[2, :, :, :]),axis=0)[::downSampleY,::downSampleX]
-                v = np.nanmean((dataQuiv[4, :, :, :]),axis=0)[::downSampleY,::downSampleX]
+                u = np.average((dataQuiv[2, :, :, :]),weights=dz,axis=0)[::downSampleY,::downSampleX]
+                v = np.average((dataQuiv[4, :, :, :]),weights=dz,axis=0)[::downSampleY,::downSampleX]
             elif(avgAbove):
-                u = np.nanmean((dataQuiv[2, :zSlice, :, :]),axis=0)[::downSampleY,::downSampleX]
-                v = np.nanmean((dataQuiv[4, :zSlice, :, :]),axis=0)[::downSampleY,::downSampleX]
+                u = np.average((dataQuiv[2, :zSlice, :, :]),weights=dz[:zSlice],axis=0)[::downSampleY,::downSampleX]
+                v = np.average((dataQuiv[4, :zSlice, :, :]),weights=dz[:zSlice],axis=0)[::downSampleY,::downSampleX]
             else:
-                u = np.nanmean((dataQuiv[2, zSlice:, :, :]),axis=0)[::downSampleY,::downSampleX]
-                v = np.nanmean((dataQuiv[4, zSlice:, :, :]),axis=0)[::downSampleY,::downSampleX]
+                u = np.average((dataQuiv[2, zSlice:, :, :]),weights=dz[zSlice:],axis=0)[::downSampleY,::downSampleX]
+                v = np.average((dataQuiv[4, zSlice:, :, :]),weights=dz[zSlice:],axis=0)[::downSampleY,::downSampleX]
             plt.quiver(
                 np.squeeze(x)[::downSampleY,::downSampleX],
                 np.squeeze(y)[::downSampleY,::downSampleX],

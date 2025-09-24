@@ -1,0 +1,24 @@
+Paul Summers, September 2025. A demo of MITgcm with iceberg2 and iceplume for group meeting.
+Dependencies loaded with conda. 
+Validated on Mac Silicon (M series chips). 
+Email paul.summers@gatech.edu with any questions
+
+The next step can be to try to run this in Parallel using MPI. This does require the extra 'openmpi' which should be a part of the env file mentioned in 'README.txt' but it can be manually installed to conda with the following command:
+
+	conda install conda-forge::openmpi
+
+As for actually setting up an MPI experiment, you can use the 'finModelMPI.py' script for this. There is fundamentally only 1 line that make this an MPI run: 
+
+	run_config['ncpus_xy'] = [4,2] # cpu distribution in the x and y directions
+
+is the specific line that specified how many cores will be used. If this total is > 1, MITgcm will only work when called with MPI.  Once you generate an experiment with >1 core, it is then also necessary to compile using the '-mpi' flag when running 'makeBuild.sh'
+
+	bash makeBuild.sh -mpi
+
+As well as the -mpi [numCores] flag when using makeRun.sh
+
+	bash makeRun.sh -mpi 8
+
+Where here I have manually matched the 8 to match 4*2 the number of cores we've asked built the model to need. If there is a mis-match MITgcm will complain and crash. When running in MPI, MITgcm outputs to files STDOUT.[CORENUM] and STDERR.[CORENUM] (e.g. STDOUT.0000). This can be a touch confusing compared to the typical ReportTTT.txt files when running on one core. 
+
+Plotting scripts handle MPI style outputs without issue or a need to specify that it is a MPI style run, so at least that is easy. 
