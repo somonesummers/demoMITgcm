@@ -51,11 +51,11 @@ fi
 if [ -z $OPT2 ]; then
    echo "===== Building with ${BUILD_FILE} at $(pwd) ====="
    $ROOT/tools/genmake2 -mods ../code -optfile $ROOT/tools/build_options/$BUILD_FILE -rootdir $ROOT
-elif [ "$2" == "-mpi" ]; then
+elif [ $OPT2 == "-mpi" ]; then
    echo "====== Building with MPI and ${BUILD_FILE} at $(pwd) ====="
    $ROOT/tools/genmake2 -mods ../code -mpi -optfile $ROOT/tools/build_options/$BUILD_FILE -rootdir $ROOT
 else
-   echo "$2"
+   echo $OPT2
    echo "invalid 2nd argument"
    exit 2
 fi
