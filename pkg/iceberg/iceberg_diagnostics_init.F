@@ -81,7 +81,7 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
       diagCode  = 'UU      MR      '
       diagMate  = diagNum + 2
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,
-     I     diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
 
       diagName  = 'BRG_TauY'
       diagTitle = 
@@ -90,7 +90,7 @@ C---+----1----+----2----+----3----+----4----+----5----+----6----+----7-|--+----|
       diagCode  = 'VV      MR      '
       diagMate  = diagNum
       CALL DIAGNOSTICS_ADDTOLIST( diagNum,
-     I     diagName, diagCode, diagUnits, diagTitle, 0, myThid )
+     I     diagName, diagCode, diagUnits, diagTitle, diagMate, myThid )
 
       diagName  = 'BRGhFacC'
       diagTitle = 

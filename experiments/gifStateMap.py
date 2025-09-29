@@ -131,7 +131,7 @@ for k in kList:
             dataU = mds.rdmds(f"results/U", i)
             dataV = mds.rdmds(f"results/V", i)
         if args.kValues[k] =='Eta':
-            lvl = np.linspace(-.1,.1,31)
+            lvl = np.linspace(-2,-1.5,31)
             cm = 'cmo.curl'
             cbarLabel = "Surf Anom [m]"
         elif args.kValues[k] =='U':
@@ -158,10 +158,22 @@ for k in kList:
             lvl = np.linspace(0,0.2,31)
             cm = 'cmo.speed'
             cbarLabel = "Speed [m/s]"
+        elif args.kValues[k] =='PNH':
+            lvl = np.linspace(-.001,.001,31)
+            cm = 'PuOr'
+            cbarLabel = "Press NonHydro []"
+        elif args.kValues[k] =='PH':
+            lvl = np.linspace(-7,-5,31)
+            cm = 'PuOr'
+            cbarLabel = "Press Hydro []"
+        elif args.kValues[k] =='PHL':
+            lvl = np.linspace(168,170,31)
+            cm = 'PuOr'
+            cbarLabel = "Press PHL? (bot P?) []"
         # if(name[k] == "SPD"):
         #     dataPlot = np.sqrt(data[2, zSlice, :, :]**2 + data[3, zSlice, :, :]**2 + data[4, zSlice, :, :]**2)
         # else:
-        if(args.kValues[k] =='Eta' or flatZ):
+        if(args.kValues[k] =='Eta' or args.kValues[k] =='PHL' or flatZ):
             dataPlot = data[:, :]
         else:
             dataPlot = data[zSlice, :, :]
