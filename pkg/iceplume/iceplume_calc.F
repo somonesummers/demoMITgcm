@@ -639,7 +639,7 @@ C     S,T,ptracer are volume averaged already.
 #endif /* ALLOW_PTRACERS */
                 addMass(I,j,bk,bi,bj) = 
      &           addMass(I,j,bk,bi,bj) + volFLuxDiff(k)*1000.0 !m3/s into kg/s
-   &            * 3.0/8.0 * 1.0 / (1 + ABS(k - bk - 1)) !linear ramp 
+     &            * 3.0/8.0 * 1.0 / (1 + ABS(k - bk - 1)) !linear ramp 
                ENDDO ! smear loop
               ELSE !outflow at/near surface, just dump it here
                 temp_AddMass3D(I,J,k,bi,bj) = ! convert to potential temp
