@@ -621,23 +621,39 @@ C Find temperature and salinity of plume outflow
             ENDDO ! water column loop
             DO k = 1,Nr
              IF ( volFluxDiff(k) .GT. 0 ) THEN !this is outflow
-              DO bk = k-1,k+1
-C Here we are smearing the output over 3 cells, TODO should check that 
-C we're not coming above the surface. We smear the plume outut at k but
-C add that to the ocean at all bk values. Only Mass and PTracer get split
-C S,T are volume averaged already. 
-               temp_AddMass3D(I,J,bk,bi,bj) = ! convert to potential temp
-     &          SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
-               salt_AddMass3D(I,J,bk,bi,bj) = sProfPlume(k)
+              IF (k-2 .GT. 1) THEN !ensure we're not at surf
+               DO bk = k-2,k+2
+C     Here we are smearing the output over 5 cells if room.
+C     Just dump in one layer if near the surface.
+C     We smear the plume outut at k but
+C     add that to the ocean at all bk values. Only Mass gets split
+C     S,T,ptracer are volume averaged already. 
+                temp_AddMass3D(I,J,bk,bi,bj) = ! convert to potential temp
+     &           SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
+                salt_AddMass3D(I,J,bk,bi,bj) = sProfPlume(k)
 #ifdef ALLOW_PTRACERS
-               DO iTracer = 1,PTRACERS_num
-                ptr_AddMass3D(I,J,bk,bi,bj,iTracer)
-     &                            = ptrPlume(iTracer)/3
-               ENDDO
+                DO iTracer = 1,PTRACERS_num
+                 ptr_AddMass3D(I,J,bk,bi,bj,iTracer)
+     &                            = ptrPlume(iTracer)
+                ENDDO
 #endif /* ALLOW_PTRACERS */
-               addMass(I,j,bk,bi,bj) = 
-     &          addMass(I,j,bk,bi,bj) + volFLuxDiff(k)*1000/3 !m3/s into kg/s
-              ENDDO ! smear loop
+                addMass(I,j,bk,bi,bj) = 
+     &           addMass(I,j,bk,bi,bj) + volFLuxDiff(k)*1000.0 !m3/s into kg/s
+     &            * 3.0/8.0 * 1.0 / (1 + ABS(bk - k)) !linear ramp 
+               ENDDO ! smear loop
+              ELSE !outflow at/near surface, just dump it here
+                temp_AddMass3D(I,J,k,bi,bj) = ! convert to potential temp
+     &           SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
+                salt_AddMass3D(I,J,k,bi,bj) = sProfPlume(k)
+#ifdef ALLOW_PTRACERS
+                DO iTracer = 1,PTRACERS_num
+                 ptr_AddMass3D(I,J,k,bi,bj,iTracer)
+     &                            = ptrPlume(iTracer)
+                ENDDO
+#endif /* ALLOW_PTRACERS */
+                addMass(I,j,k,bi,bj) = 
+     &           addMass(I,j,k,bi,bj) + volFLuxDiff(k)*1000.0 !m3/s into kg/s
+              ENDIF ! (k-2 .GT. 1) THEN
              ENDIF ! volFluxDiff(k) .GT. 0
             ENDDO ! water column loop
            ELSE
