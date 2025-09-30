@@ -621,8 +621,8 @@ C Find temperature and salinity of plume outflow
             ENDDO ! water column loop
             DO k = 1,Nr
              IF ( volFluxDiff(k) .GT. 0 ) THEN !this is outflow
-              IF (k-2 .GT. 1) THEN !ensure we're not at surf
-               DO bk = k-2,k+2
+              IF (k-3 .GT. 1) THEN !ensure we're not at surf
+               DO bk = k-3,k+1
 C     Here we are smearing the output over 5 cells if room.
 C     Just dump in one layer if near the surface.
 C     We smear the plume outut at k but
@@ -639,7 +639,7 @@ C     S,T,ptracer are volume averaged already.
 #endif /* ALLOW_PTRACERS */
                 addMass(I,j,bk,bi,bj) = 
      &           addMass(I,j,bk,bi,bj) + volFLuxDiff(k)*1000.0 !m3/s into kg/s
-     &            * 3.0/8.0 * 1.0 / (1 + ABS(bk - k)) !linear ramp 
+   &            * 3.0/8.0 * 1.0 / (1 + ABS(k - bk - 1)) !linear ramp 
                ENDDO ! smear loop
               ELSE !outflow at/near surface, just dump it here
                 temp_AddMass3D(I,J,k,bi,bj) = ! convert to potential temp
