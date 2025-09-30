@@ -51,7 +51,7 @@ C     == Routine arguments ==
 
 C     !LOCAL VARIABLES:
 C     == Local variables ==
-C     I,J,K,bi,bj  :: loop indices
+C     I,J,K,bi,bj,bk  :: loop indices
 C     msgBuf       :: Informational/error message buffer
 C     sProf, tProf, uProf, vProf :: salt, pot. temperature and
 C                            uVel and vVel profiles
@@ -67,7 +67,7 @@ C     wVelCell, vVelCell, uVelCell :: velocities at cell centres
 C     meanVel :: ice tangental velocity
 C     rho_0 :: average density of seawater
 
-      INTEGER bi, bj
+      INTEGER bi, bj, bk
       INTEGER J, K, I
 
       _RL eps5
@@ -602,34 +602,44 @@ C     (icefrontlength = dy / dxdy = 1 / dx)
 
 C The plume transport is undertaken using the addMass terms.
 C addMass terms for volume (kg/s), pot. temperature, salinity and ptracers are input 
-C into the correct locations in 3D arrays
+C into the correct locations in 3D arrays. First do inflow, than smeared outflow
            IF ( Q_sg.NE.0 ) THEN
 C Find temperature and salinity of plume outflow
              DO k = 1,Nr 
-               IF ( volFluxDiff(k) .GT. 0 ) THEN
-               temp_AddMass3D(I,J,K,bi,bj) = ! convert to potential temp
-     &          SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
-               salt_AddMass3D(I,J,K,bi,bj) = sProfPlume(k)
+               IF ( volFluxDiff(k) .LT. 0 ) THEN !this is inflow
+                temp_AddMass3D(I,J,K,bi,bj) = ptProf(k)
+                salt_AddMass3D(I,J,K,bi,bj) = sProf(k)
 #ifdef ALLOW_PTRACERS
-               DO iTracer = 1,PTRACERS_num
-                ptr_AddMass3D(I,J,K,bi,bj,iTracer)
-     &                            = ptrPlume(iTracer)
-               ENDDO
-#endif /* ALLOW_PTRACERS */
-               ELSE 
-               temp_AddMass3D(I,J,K,bi,bj) = ptProf(k)
-               salt_AddMass3D(I,J,K,bi,bj) = sProf(k)
-#ifdef ALLOW_PTRACERS
-               DO iTracer = 1,PTRACERS_num
-               ptr_AddMass3D(I,J,K,bi,bj,iTracer) 
+                DO iTracer = 1,PTRACERS_num
+                ptr_AddMass3D(I,J,K,bi,bj,iTracer) 
      &                            = ptrProf(k,iTracer)
+                ENDDO
+                addMass(I,j,k,bi,bj) = 
+     &           addMass(I,j,k,bi,bj) + volFLuxDiff(k)*1000 !m3/s into kg/s
+#endif /* ALLOW_PTRACERS */
+               ENDIF !volFluxDiff(k) .LT. 0
+            ENDDO ! water column loop
+            DO k = 1,Nr
+             IF ( volFluxDiff(k) .GT. 0 ) THEN !this is outflow
+              DO bk = k-1,k+1
+C Here we are smearing the output over 3 cells, TODO should check that 
+C we're not coming above the surface. We smear the plume outut at k but
+C add that to the ocean at all bk values. Only Mass and PTracer get split
+C S,T are volume averaged already. 
+               temp_AddMass3D(I,J,bk,bi,bj) = ! convert to potential temp
+     &          SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
+               salt_AddMass3D(I,J,bk,bi,bj) = sProfPlume(k)
+#ifdef ALLOW_PTRACERS
+               DO iTracer = 1,PTRACERS_num
+                ptr_AddMass3D(I,J,bk,bi,bj,iTracer)
+     &                            = ptrPlume(iTracer)/3
                ENDDO
 #endif /* ALLOW_PTRACERS */
-               ENDIF
-C Convert m3/s into kg/s
-             addMass(I,j,k,bi,bj) = volFLuxDiff(k)*1000 
-            ENDDO
-
+               addMass(I,j,bk,bi,bj) = 
+     &          addMass(I,j,bk,bi,bj) + volFLuxDiff(k)*1000/3 !m3/s into kg/s
+              ENDDO ! smear loop
+             ENDIF ! volFluxDiff(k) .GT. 0
+            ENDDO ! water column loop
            ELSE
 
            DO K = 1,Nr 
