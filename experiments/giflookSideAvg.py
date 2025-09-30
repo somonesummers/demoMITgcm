@@ -233,7 +233,7 @@ for k in kList:
             cp = plt.pcolormesh(
                 np.squeeze(x[0,:]),
                 np.squeeze(z),
-                np.squeeze(np.average(data[kk, :, 1:-1, :], weights=openFrac[:,:,:],axis=1)),
+                np.squeeze(np.average(data[kk, :, :, :], weights=openFrac[:,:,:],axis=1)),
                 cmap=cm,
                 vmin=np.min(lvl),
                 vmax=np.max(lvl),
