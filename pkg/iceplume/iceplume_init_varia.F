@@ -59,7 +59,6 @@ CEOP
       DO k = 1,Nr
       sProf  (K) = 0. _d 0
       tProf  (K) = 0. _d 0
-      ptProf (K) = 0. _d 0
       prProf (K) = 0. _d 0
       uProf  (K) = 0. _d 0
       vProf  (K) = 0. _d 0

@@ -194,9 +194,7 @@ C and velocity profiles for that column
 C           Tracers
             prProf(k) = ABS(rC(k))*rho_0*9.81*1.0E-6 ! Pressure (dbar)
             sProf(K)  = salt(I,J,K,bi,bj)         ! Salinity
-            ptProf(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
-            tProf(k)  = 
-     &      SW_TEMP(sProf(k),ptProf(k),prProf(k),0. _d 0) ! Temperature
+            tProf(k)  = theta(I,J,K,bi,bj)        ! Potential Temperature
 
 #ifdef ALLOW_PTRACERS
             DO iTracer = 1,PTRACERS_num
@@ -617,7 +615,7 @@ C Find temperature and salinity of plume outflow
                ENDDO
 #endif /* ALLOW_PTRACERS */
                ELSE 
-               temp_AddMass3D(I,J,K,bi,bj) = ptProf(k)
+               temp_AddMass3D(I,J,K,bi,bj) = tProf(k)
                salt_AddMass3D(I,J,K,bi,bj) = sProf(k)
 #ifdef ALLOW_PTRACERS
                DO iTracer = 1,PTRACERS_num
@@ -633,7 +631,7 @@ C Convert m3/s into kg/s
            ELSE
 
            DO K = 1,Nr 
-            temp_AddMass3D(I,J,K,bi,bj) = ptProf(k)
+            temp_AddMass3D(I,J,K,bi,bj) = tProf(k)
             salt_AddMass3D(I,J,K,bi,bj) = sProf(k)
             addMass(I,j,k,bi,bj) = 0.D0
            ENDDO
