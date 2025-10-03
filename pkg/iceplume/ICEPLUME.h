@@ -37,7 +37,7 @@ C Header file pkg/ICEPLUME
       COMMON /ICEPLUME_FIELDS/
      &     runoffVel, runoffVel0, runoffVel1,
      &     runoffRad, runoffRad0, runoffRad1,
-     &     plumeMask, 
+     &     plumeMask,
      &     HeatFlux3D, FwFlux3D,
      &     rProfPlume3D, wProfPlume3D,
      &     tProfPlume3D, sProfPlume3D,
@@ -121,6 +121,14 @@ C Header file pkg/ICEPLUME
       _RL thetaProfPlume3DLocal (sNx,sNy,Nr)
       _RL distanceProfPlume3DLocal (sNx,sNy,Nr)
 #endif      
+
+      COMMON /ICEPLUME_PARM_I/
+     &     plumeBoxAvgR,
+     &     plumeVertRampR,
+     &     plumeVertRampShift
+      INTEGER plumeBoxAvgR
+      INTEGER plumeVertRampR
+      INTEGER plumeVertRampShift !Positive moves up towards surface
 
       COMMON /ICEPLUME_PARM_R/
      &     E_0,

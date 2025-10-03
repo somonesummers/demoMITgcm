@@ -55,7 +55,10 @@ C    PARMO1 - ICEPLUME inputs
      &     useConePlume,
      &     maxDepth,
      &     backgroundVel,
-     &     sin_beta
+     &     sin_beta,
+     &     plumeBoxAvgR,
+     &     plumeVertRampR,
+     &     plumeVertRampShift
 
 C    PARMO2 - icefront inputs required for thermodynamics
       NAMELIST /ICEPLUME_PARM02/
@@ -101,6 +104,9 @@ C     Default values for PARM01
       Cd     = 0.0025
       backgroundVel = 0.001
       sin_beta = 1.0D0
+      plumeBoxAvgR = 2
+      plumeVertRampR = 2
+      plumeVertRampShift = 0
 
 C Default values for PARMO2
        ICEFRONTlatentHeat       =  334.0 _d 3
