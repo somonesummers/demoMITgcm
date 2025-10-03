@@ -19,6 +19,8 @@ parser.add_argument('-n','--numFrames', nargs='?', type=int, default = 60,
                     help='optional specification of numFrames [default = 60]')
 parser.add_argument('-t','--timeRange', nargs=2, type=int, default = None,
                     help='optional specification of start and endtime in DAYS [default = Full Range]')
+parser.add_argument('-xl','--xlimit', nargs='?', type=int, default = None,
+                    help='optional max x [default = entire frame]')
 parser.add_argument('-s','--shadow', action='count', default=0,
                     help='option of shadow for mélange [default (off)]')
 args = parser.parse_args()
@@ -281,7 +283,8 @@ for k in kList:
                 alpha=.5
                 )
 
-        # plt.xlim([0, 10000])
+        if(args.xlimit != None):
+                plt.xlim([0, args.xlimit])
         plt.xlabel('Along Fjord [m] %.3f %.3f nan: %i' %(np.nanmin(data[kk, :, ySlice, :]),np.nanmax(data[kk, :, ySlice, :]),np.max(np.isnan(data[kk, :, ySlice, :]))))
         plt.ylabel('Depth [m]')
         plt.title("%s y = %i at %.02f days" % (name[k], y[ySlice,0], i/86400.0*dt))
