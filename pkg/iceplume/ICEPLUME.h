@@ -75,8 +75,8 @@ C Header file pkg/ICEPLUME
       _RS Qin (100)
 
       COMMON /ICEPLUME_FIELDS_PROFILES/
-     &     sProf, tProf, ptProf, prProf, uProf, vProf,
-     &     sProfAvg, tProfAvg, ptProfAvg,
+     &     sProf, tProf, prProf, uProf, vProf,
+     &     sProfAvg, tProfAvg,
      &     rProfPlume, wProfPlume, tProfPlume, sProfPlume,
      &     uProfPlume, mProfPlume, mProfAv, mProf, zProf, zProfAbs,
      &     volFLux, volFluxDiff,
@@ -84,10 +84,8 @@ C Header file pkg/ICEPLUME
      &     delta_z, aProfPlume, mIntProfPlume
       _RL sProf  (Nr)
       _RL tProf  (Nr)
-      _RL ptProf (Nr)
       _RL sProfAvg  (Nr)
       _RL tProfAvg  (Nr)
-      _RL ptProfAvg (Nr)
       _RL prProf (Nr)
       _RL uProf  (Nr)
       _RL vProf  (Nr)

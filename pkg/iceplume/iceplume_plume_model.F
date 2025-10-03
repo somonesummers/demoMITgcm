@@ -202,7 +202,7 @@ C we assign ISTATE = -1, again ending the call to the plume model.
         depth = T
 
 C Calculate plume density
-        rho_plume = RHO(temperature,salinity,depth)
+        rho_plume = RHO(temperature,salinity,depth,myThid)
 
         IF (IOUT.EQ.Ktop) THEN
          tambient = tprof(Ktop)
@@ -212,7 +212,7 @@ C Calculate plume density
          tambient = .5*(tprof(IOUT-1)+tprof(IOUT))
          sambient = .5*(sprof(IOUT-1)+sprof(IOUT))
          rho_ambient = RHO(.5*(tprofAvg(IOUT-1)+tprofAvg(IOUT)),
-     &       .5*(sprofAvg(IOUT-1)+sprofAvg(IOUT)),depth)
+     &       .5*(sprofAvg(IOUT-1)+sprofAvg(IOUT)),depth,myThid)
         ENDIF !IOUT.EQ.Ktop
 
 C Calculate ambient density (now we just load it above)
@@ -333,9 +333,9 @@ C Interpolate from imposed ambient profiles
 	  Tin = T
 	  
 C Plume density
-      rho_1   = RHO(Y(3),Y(4),Tin)
+      rho_1   = RHO(Y(3),Y(4),Tin,myThid)
 C Ambient density
-      rho_0 = RHO(Tambient,Sambient,Tin)
+      rho_0 = RHO(Tambient,Sambient,Tin,myThid)
 
 C Equations for Sb, Tb and mdot
 
@@ -422,8 +422,8 @@ C     Interpolate from imposed ambient profiles
       ENDIF
 
       Tin = T
-      rho_1   = RHO(Y(3),Y(4),Tin)
-      rho_0 = RHO(Tambient,Sambient,Tin)
+      rho_1   = RHO(Y(3),Y(4),Tin,myThid)
+      rho_0 = RHO(Tambient,Sambient,Tin,myThid)
 
 C     Equations for Sb, Tb and mdot
 
@@ -507,8 +507,8 @@ C     Interpolate from imposed ambient profiles
       ENDIF
 
       Tin = T
-      rho_1   = RHO(Y(3),Y(4),Tin)
-      rho_0 = RHO(Tambient,Sambient,Tin)
+      rho_1   = RHO(Y(3),Y(4),Tin,myThid)
+      rho_0 = RHO(Tambient,Sambient,Tin,myThid)
 
 C     Equations for Sb, Tb and mdot
 
@@ -574,49 +574,25 @@ C Dummy routine for ODEPACK. Necessary for Jacobian matrix if stiff ODEs.
       END
 
 C ---------------------------------------------------------------------
-      DOUBLE PRECISION FUNCTION RHO(t,S,z)
+      DOUBLE PRECISION FUNCTION RHO(T,S,z,mythid)
 
-C Equation of state (UNESCO 1983)
+C     Equation of state, Use EOD defined by system params
 
-C     T = temperature (deg C)
+C     T = potential temperature (deg C)
 C     S = salinity (PSU)
 C     z = depth (m)
-
+      INTEGER  mythid
       DOUBLE PRECISION T,S,z
       DOUBLE PRECISION rho_0, g, P
-      DOUBLE PRECISION kw, Aw, Bw, k0
-      DOUBLE PRECISION bulk_modulus
-      DOUBLE PRECISION A, B, C, rho_w,rho_zero
 
       PARAMETER(rho_0=1027)
       PARAMETER(g=9.81)
 
       P= rho_0*g*abs(z)*1.0E-5
-   
-C ... RHO_1 (in situ) (saved in Y(7))
-      kw= 19652.21+ 148.4206*T- 2.327105*T**2+ 
-     &    1.360477e-2*(T**3)-5.155288e-5*(T**4)
-      Aw= 3.239908+ 1.43713e-3*T+ 1.16092e-4*T**2-
-     &    5.77905e-7*T**3
-      Bw= 8.50935e-5- 6.12293e-6*T + 5.2787e-8*(T**2)
-      k0= kw + (54.6746- 0.603459*T+ 1.09987e-2*(T**2)
-     &    -6.1670e-5*(T**3))*S +(7.944e-2 + 1.6483e-2*
-     &    T- 5.3009e-4*(T**2))*(S**1.5)
-      A=  Aw+ (2.2838e-3- 1.0981e-5*T- 1.6078e-6*(T**2))
-     &    *S+ 1.91075e-4*(S**1.5)
-      B= Bw+ (-9.9348e-7+ 2.0816e-8*T+ 9.1697e-10*T**2)*S
-      bulk_modulus= k0+ A*P+ B*P**2
 
-      A= 8.24493e-1- 4.0899e-3*T+ 7.6438e-5*T**2-
-     &   8.2467e-7*T**3+5.3875e-9*T**4
-      B= -5.72466e-3 + 1.0227e-4*T- 1.6546e-6*T**2
-      C= 4.8314e-4
-      rho_w= 999.842594 + 6.793952e-2*T- 9.095290e-3*T**2+
-     &       1.001685e-4*T**3-1.120083e-6*T*
-     &       *4+ 6.536336e-9*T**5
-      rho_zero= rho_w+ A*S + B*(S**1.5)+ C*(S**2)
-
-      RHO= rho_zero/(1- (P/bulk_modulus))
+      CALL FIND_RHO_SCALAR(
+     I                          T, S, P,
+     O                          RHO, myThid )
 
       RETURN
       END

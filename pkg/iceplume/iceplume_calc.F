@@ -200,26 +200,22 @@ C     TODO still need to protect these cells outside range
         IF( plumeMask(I,J,bi,bj) .LT. 0 ) THEN
             sProfAvg(K)  = (salt(I,J,K,bi,bj) + salt(I+1,J,K,bi,bj) +
      &          salt(I-1,J,K,bi,bj)) / 3.0         ! Salinity
-            ptProfAvg(K) = (theta(I,J,K,bi,bj) + theta(I,J+1,K,bi,bj) +
+            tProfAvg(K) = (theta(I,J,K,bi,bj) + theta(I,J+1,K,bi,bj) +
      &          theta(I,J-1,K,bi,bj)) / 3.0         ! Potential Temperature
         ELSEIF (plumeMask(I,J,bi,bj) .GT. 0) THEN
             sProfAvg(K)  = (salt(I,J,K,bi,bj) + salt(I,J+1,K,bi,bj) +
      &          salt(I,J-1,K,bi,bj)) / 3.0         ! Salinity
-            ptProfAvg(K) = (theta(I,J,K,bi,bj) + theta(I,J+1,K,bi,bj) +
+            tProfAvg(K) = (theta(I,J,K,bi,bj) + theta(I,J+1,K,bi,bj) +
      &          theta(I,J-1,K,bi,bj)) / 3.0         ! Potential Temperature
         ELSE 
             sProfAvg(K)  = salt(I,J,K,bi,bj)         ! Salinity
-            ptProfAvg(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
+            tProfAvg(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
         ENDIF 
          prProf(k) = ABS(rC(k))*rho_0*9.81*1.0E-6 ! Pressure (dbar)
-        tProfAvg(k)  = 
-     &      SW_TEMP(sProfAvg(k),ptProfAvg(k),prProf(k),0. _d 0) ! Temperature
 C     So funny story, we did all that just to get the width avg
 C     Density, but we still need the exact profile. So run it all back
         sProf(K)  = salt(I,J,K,bi,bj)         ! Salinity
-        ptProf(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
-        tProf(k)  = 
-     &      SW_TEMP(sProf(k),ptProf(k),prProf(k),0. _d 0) ! Temperature
+        tProf(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
 #ifdef ALLOW_PTRACERS
             DO iTracer = 1,PTRACERS_num
              ptrProf(k,iTracer) = pTracer(I,J,K,bi,bj,iTracer)
@@ -629,7 +625,7 @@ C into the correct locations in 3D arrays. First do inflow, than smeared outflow
 C Find temperature and salinity of plume outflow
              DO k = 1,Nr 
                IF ( volFluxDiff(k) .LT. 0 ) THEN !this is inflow
-                temp_AddMass3D(I,J,K,bi,bj) = ptProf(k)
+                temp_AddMass3D(I,J,K,bi,bj) = tProf(k)
                 salt_AddMass3D(I,J,K,bi,bj) = sProf(k)
 #ifdef ALLOW_PTRACERS
                 DO iTracer = 1,PTRACERS_num
@@ -650,8 +646,7 @@ C     Just dump in one layer if near the surface.
 C     We smear the plume outut at k but
 C     add that to the ocean at all bk values. Only Mass gets split
 C     S,T,ptracer are volume averaged already. 
-                temp_AddMass3D(I,J,bk,bi,bj) = ! convert to potential temp
-     &           SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
+                temp_AddMass3D(I,J,bk,bi,bj) = tProfPlume(k)
                 salt_AddMass3D(I,J,bk,bi,bj) = sProfPlume(k)
 #ifdef ALLOW_PTRACERS
                 DO iTracer = 1,PTRACERS_num
@@ -664,8 +659,7 @@ C     S,T,ptracer are volume averaged already.
      &            * (3 - ABS(k - bk))/9.0 !linear ramp 
                ENDDO ! smear loop
               ELSE !outflow at/near surface, just dump it here
-                temp_AddMass3D(I,J,k,bi,bj) = ! convert to potential temp
-     &           SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
+                temp_AddMass3D(I,J,k,bi,bj) = tProfPlume(k)
                 salt_AddMass3D(I,J,k,bi,bj) = sProfPlume(k)
 #ifdef ALLOW_PTRACERS
                 DO iTracer = 1,PTRACERS_num
@@ -681,7 +675,7 @@ C     S,T,ptracer are volume averaged already.
            ELSE
 
            DO K = 1,Nr 
-            temp_AddMass3D(I,J,K,bi,bj) = ptProf(k)
+            temp_AddMass3D(I,J,K,bi,bj) = tProf(k)
             salt_AddMass3D(I,J,K,bi,bj) = sProf(k)
             addMass(I,j,k,bi,bj) = 0.D0
            ENDDO
