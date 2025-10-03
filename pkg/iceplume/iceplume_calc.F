@@ -605,8 +605,7 @@ C into the correct locations in 3D arrays
 C Find temperature and salinity of plume outflow
              DO k = 1,Nr 
                IF ( volFluxDiff(k) .GT. 0 ) THEN
-               temp_AddMass3D(I,J,K,bi,bj) = ! convert to potential temp
-     &          SW_PTMP(sProfPlume(k),tProfPlume(k),prProf(k),0. _d 0)
+               temp_AddMass3D(I,J,K,bi,bj) = tProfPlume(k)
                salt_AddMass3D(I,J,K,bi,bj) = sProfPlume(k)
 #ifdef ALLOW_PTRACERS
                DO iTracer = 1,PTRACERS_num
