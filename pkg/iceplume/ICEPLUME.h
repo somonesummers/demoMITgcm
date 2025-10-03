@@ -76,6 +76,7 @@ C Header file pkg/ICEPLUME
 
       COMMON /ICEPLUME_FIELDS_PROFILES/
      &     sProf, tProf, ptProf, prProf, uProf, vProf,
+     &     sProfAvg, tProfAvg, ptProfAvg,
      &     rProfPlume, wProfPlume, tProfPlume, sProfPlume,
      &     uProfPlume, mProfPlume, mProfAv, mProf, zProf, zProfAbs,
      &     volFLux, volFluxDiff,
@@ -84,6 +85,9 @@ C Header file pkg/ICEPLUME
       _RL sProf  (Nr)
       _RL tProf  (Nr)
       _RL ptProf (Nr)
+      _RL sProfAvg  (Nr)
+      _RL tProfAvg  (Nr)
+      _RL ptProfAvg (Nr)
       _RL prProf (Nr)
       _RL uProf  (Nr)
       _RL vProf  (Nr)

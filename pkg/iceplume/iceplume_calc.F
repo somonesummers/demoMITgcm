@@ -69,7 +69,6 @@ C     rho_0 :: average density of seawater
 
       INTEGER bi, bj, bk
       INTEGER J, K, I
-
       _RL eps5
       _RL plumeAreaInCell
       _RL negSum, posSum, posNegRatio
@@ -187,17 +186,40 @@ C         Cell resolution
           delta_x = dxG(I,J,bi,bj)
           delta_y = dyG(I,J,bi,bj)
 
-C Create variables with temperature, salinity
-C and velocity profiles for that column
+C     Create variables with temperature, salinity
+C     and velocity profiles for that column
 
 	   DO K = 1,Nr
 C           Tracers
-            prProf(k) = ABS(rC(k))*rho_0*9.81*1.0E-6 ! Pressure (dbar)
-            sProf(K)  = salt(I,J,K,bi,bj)         ! Salinity
-            ptProf(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
-            tProf(k)  = 
+C     Negative mask values indicate north-south ice front orientation
+C     Positive mask values indicate east-west ice front orientation
+C     Here we are extracting the water column averaged across the 
+C     glacier face +/- 1 cell to prevent the plume piling up on itself 
+C     and discharging too low
+C     TODO still need to protect these cells outside range
+        IF( plumeMask(I,J,bi,bj) .LT. 0 ) THEN
+            sProfAvg(K)  = (salt(I,J,K,bi,bj) + salt(I+1,J,K,bi,bj) +
+     &          salt(I-1,J,K,bi,bj)) / 3.0         ! Salinity
+            ptProfAvg(K) = (theta(I,J,K,bi,bj) + theta(I,J+1,K,bi,bj) +
+     &          theta(I,J-1,K,bi,bj)) / 3.0         ! Potential Temperature
+        ELSEIF (plumeMask(I,J,bi,bj) .GT. 0) THEN
+            sProfAvg(K)  = (salt(I,J,K,bi,bj) + salt(I,J+1,K,bi,bj) +
+     &          salt(I,J-1,K,bi,bj)) / 3.0         ! Salinity
+            ptProfAvg(K) = (theta(I,J,K,bi,bj) + theta(I,J+1,K,bi,bj) +
+     &          theta(I,J-1,K,bi,bj)) / 3.0         ! Potential Temperature
+        ELSE 
+            sProfAvg(K)  = salt(I,J,K,bi,bj)         ! Salinity
+            ptProfAvg(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
+        ENDIF 
+         prProf(k) = ABS(rC(k))*rho_0*9.81*1.0E-6 ! Pressure (dbar)
+        tProfAvg(k)  = 
+     &      SW_TEMP(sProfAvg(k),ptProfAvg(k),prProf(k),0. _d 0) ! Temperature
+C     So funny story, we did all that just to get the width avg
+C     Density, but we still need the exact profile. So run it all back
+        sProf(K)  = salt(I,J,K,bi,bj)         ! Salinity
+        ptProf(K) = theta(I,J,K,bi,bj)        ! Potential Temperature
+        tProf(k)  = 
      &      SW_TEMP(sProf(k),ptProf(k),prProf(k),0. _d 0) ! Temperature
-
 #ifdef ALLOW_PTRACERS
             DO iTracer = 1,PTRACERS_num
              ptrProf(k,iTracer) = pTracer(I,J,K,bi,bj,iTracer)
@@ -621,8 +643,8 @@ C Find temperature and salinity of plume outflow
             ENDDO ! water column loop
             DO k = 1,Nr
              IF ( volFluxDiff(k) .GT. 0 ) THEN !this is outflow
-              IF (k-3 .GT. 1) THEN !ensure we're not at surf
-               DO bk = k-3,k+1
+              IF (k-2 .GT. 1) THEN !ensure we're not at surf
+               DO bk = k-2,k+2
 C     Here we are smearing the output over 5 cells if room.
 C     Just dump in one layer if near the surface.
 C     We smear the plume outut at k but
@@ -639,7 +661,7 @@ C     S,T,ptracer are volume averaged already.
 #endif /* ALLOW_PTRACERS */
                 addMass(I,j,bk,bi,bj) = 
      &           addMass(I,j,bk,bi,bj) + volFLuxDiff(k)*1000.0 !m3/s into kg/s
-     &            * 3.0/8.0 * 1.0 / (1 + ABS(k - bk - 1)) !linear ramp 
+     &            * (3 - ABS(k - bk))/9.0 !linear ramp 
                ENDDO ! smear loop
               ELSE !outflow at/near surface, just dump it here
                 temp_AddMass3D(I,J,k,bi,bj) = ! convert to potential temp
@@ -763,6 +785,3 @@ C     end bi/bj-loops
 
       RETURN
       END
-
-
-

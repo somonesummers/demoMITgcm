@@ -207,13 +207,16 @@ C Calculate plume density
         IF (IOUT.EQ.Ktop) THEN
          tambient = tprof(Ktop)
          sambient = sprof(Ktop)
+         rho_ambient = RHO(tProfAvg(Ktop),sprofAvg(Ktop),depth)
         ELSE
          tambient = .5*(tprof(IOUT-1)+tprof(IOUT))
          sambient = .5*(sprof(IOUT-1)+sprof(IOUT))
+         rho_ambient = RHO(.5*(tprofAvg(IOUT-1)+tprofAvg(IOUT)),
+     &       .5*(sprofAvg(IOUT-1)+sprofAvg(IOUT)),depth)
         ENDIF !IOUT.EQ.Ktop
 
-C Calculate ambient density
-        rho_ambient = RHO(tambient,sambient,depth)
+C Calculate ambient density (now we just load it above)
+C         rho_ambient = RHO(tambient,sambient,depth)
         IF ( rho_plume .GT. rho_ambient ) ISTATE = -1
 
 C If ISTATE is now < 0, then plume has reached neutral buoyancy 
