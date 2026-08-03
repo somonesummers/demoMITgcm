@@ -81,18 +81,18 @@ setUpPrint('====== Welcome to the mélange building script =====')
 run_config = {}
 grid_params = {}
 run_config['ncpus_xy'] = [1,1] # cpu distribution in the x and y directions
-run_config['run_name'] = 'plumeRadius'
+run_config['run_name'] = 'verify'
 run_config['ndays'] = 1 # simulation time (days)
 run_config['test'] = False # if True, run_config['nyrs'] will be shortened to a few time steps
 
-wallWidthInd = 2 #width of walls in units of dy
+wallWidthInd = 1 #width of walls in units of dy
 run_config['horiz_res_m'] = 500 # horizontal grid spacing (m)
-run_config['Lx_m'] = 20000 # domain size in x (m)
+run_config['Lx_m'] = 15000 # domain size in x (m)
 run_config['Ly_m'] = 4000 + (2 * wallWidthInd * run_config['horiz_res_m']) # domain size in y (m) with walls (1 wall each side)
 # NOTE: the number of grid points in x and y should be multiples of the number of cpus.
-run_config['terminus_m'] = run_config['horiz_res_m']
+run_config['terminus_m'] = 0#run_config['horiz_res_m']
 terminus_index = int(run_config['terminus_m']/run_config['horiz_res_m'])
-grid_params['Nr'] = 40 # num of z-grid points
+grid_params['Nr'] = 32 # num of z-grid points
 
 run_config['make_icebergs'] = True # Do we make bergs? No if running from spin-up
 
@@ -110,9 +110,9 @@ lengthOffShoreLength = 8e3 #width of offshore region [m]
 indexOSC = int(lengthOffShoreLength/run_config['horiz_res_m'])
 
 # Iceberg configuration =========================
-iceBergDepth = 400 # max iceberg depth [meters], used for ICEBERG package
-iceExtent = 8000 # [meters] of extent of ice
-iceCoverage = 60 # % of ice cover in melange, stay under 90% ideally
+iceBergDepth = 300 # max iceberg depth [meters], used for ICEBERG package
+iceExtent = 5000 # [meters] of extent of ice
+iceCoverage = 40 # % of ice cover in melange, stay under 90% ideally
 doMelt = 1 # do we actually calculate melt (0/1 = no/yes)
 doBlock = 1 # do we actually calculate melt (0/1 = no/yes)
 # Set median drafts to align with output from melange1D
@@ -315,7 +315,7 @@ params01['implicitFreeSurface'] = True
 # params01['implicDiv2DFlow'] = 1.0
 params01['selectAddFluid'] = 1
 # params01['useRealFreshWaterFlux'] = True #we add fluid above, so I think this is un-needed
-# params01['exactConserv'] = True
+params01['exactConserv'] = True
 params01['implicitViscosity'] = True
 params01['implicitDiffusion'] = True
 
@@ -326,10 +326,10 @@ params01['gravity'] = g
 
 # misc
 params01['hFacMin'] = 0.05
-params01['nonHydrostatic'] = False
+params01['nonHydrostatic'] = True
 params01['readBinaryPrec'] = 64
-# params01['useSmag3D'] = True
-# params01['smag3D_coeff'] = 1e-4
+params01['useSmag3D'] = True
+params01['smag3D_coeff'] = 1e-4
 
 # ## Numeric solvers and I/O controls
 
@@ -625,25 +625,25 @@ elif(season_sw == 'w'):
     ## Access DOI: DATASET | Published 2021 | doi:10.18739/A2M03XZ2K
     data_tmp=np.load('shelfProfile2010.npz')
 
-# Can have bad values, toss them, set deepest measure equal to deeped valid measure for interpolator to work
-s_tmp = data_tmp['S']
-s_tmp[abs(s_tmp)>40] = np.nan
-t_tmp = data_tmp['T']
-t_tmp[abs(t_tmp)>10] = np.nan
-z_tmp = 1*data_tmp['z']
+# # Can have bad values, toss them, set deepest measure equal to deeped valid measure for interpolator to work
+# s_tmp = data_tmp['S']
+# s_tmp[abs(s_tmp)>40] = np.nan
+# t_tmp = data_tmp['T']
+# t_tmp[abs(t_tmp)>10] = np.nan
+# z_tmp = 1*data_tmp['z']
 
-# Smooth the data over a window of 5 meters
-window_size = 5
-weights = np.ones(window_size) / window_size
-s_smth = np.convolve(s_tmp, weights, mode='same')
-t_smth = np.convolve(t_tmp, weights, mode='same')
+# # Smooth the data over a window of 5 meters
+# window_size = 5
+# weights = np.ones(window_size) / window_size
+# s_smth = np.convolve(s_tmp, weights, mode='same')
+# t_smth = np.convolve(t_tmp, weights, mode='same')
 
-#Fill the bottom of these profiles with a valid value for interpolator
-s_smth[-1] = s_tmp[~np.isnan(s_tmp)][-1]
-t_smth[-1] = t_tmp[~np.isnan(t_tmp)][-1]
+# #Fill the bottom of these profiles with a valid value for interpolator
+# s_smth[-1] = s_tmp[~np.isnan(s_tmp)][-1]
+# t_smth[-1] = t_tmp[~np.isnan(t_tmp)][-1]
 ## Sermilik Winter like 2 layer
-# t_avg = 1
-# t_del = 4
+# t_avg = 3
+# t_del = 1
 # s_avg = 34
 # s_del = 1.5
 # pyclineDepth = 175
@@ -651,7 +651,8 @@ t_smth[-1] = t_tmp[~np.isnan(t_tmp)][-1]
 # z_tmp =  np.arange(0,600,20); #must be increasing, so do depth as positive, see negs later for z[:]
 # t_tmp =  t_del / np.pi * np.arctan(2 * (z_tmp - pyclineDepth)/pyclineThickness) + t_avg
 # s_tmp =  s_del / np.pi * np.arctan(2 * (z_tmp - pyclineDepth)/pyclineThickness) + s_avg
-
+# t_smth = t_tmp
+# s_smth = s_tmp
 # # Sermilik Winter like 
 # z_tmp =  np.asarray([   0,  100,  200,  250,  300,  500,  600]); #must be increasing, so do depth as positive, see negs later for z[:]
 # t_tmp =  np.asarray([-2.2,   -2,   -1,    0,  1.8,  1.9,  2.0]);
@@ -661,13 +662,17 @@ t_smth[-1] = t_tmp[~np.isnan(t_tmp)][-1]
 # z_tmp =  np.asarray([  0,  10,   50,  100,  200,  300, 500]); #must be increasing, so do depth as positive, see negs later for z[:]
 # t_tmp =  np.asarray([  1,   1,  1.5,  1.8,  2.1,  2.3, 2.6]);
 # s_tmp =  np.asarray([ 33,33.2, 33.8, 34.0, 34.3, 34.4,34.6]);
-t_int = interpolate.PchipInterpolator(z_tmp[~np.isnan(s_smth)], t_smth[~np.isnan(s_smth)],extrapolate=False)
-s_int = interpolate.PchipInterpolator(z_tmp[~np.isnan(s_smth)], s_smth[~np.isnan(s_smth)],extrapolate=False)
+# s_smth = s_tmp.copy()
+# t_smth = t_tmp.copy()
+
+
+t_int = interpolate.PchipInterpolator(z_tmp[~np.isnan(s_smth)], t_smth[~np.isnan(s_smth)],extrapolate=True)
+s_int = interpolate.PchipInterpolator(z_tmp[~np.isnan(s_smth)], s_smth[~np.isnan(s_smth)],extrapolate=True)
 for j in np.arange(0,grid_params['Ny']):
     for i in np.arange(0, grid_params['Nx']):
         t2[:, j, i] = t_int(-1 * z[:])
         s2[:, j, i] = s_int(-1 * z[:])
-
+setUpPrint(f't2: {t2[:,0,0]}')
 
 #East BC
 for j in np.arange(0,grid_params['Ny']):
@@ -723,19 +728,20 @@ write_bin("NsBCptr.bin", Ptr_ns)
 write_bin("EBCptr.bin", Ptr_e)
 
 if OSX == 'Darwin':  #only work on Mac for now, can't get gsw installed on PACE
-    d_tmp = data_tmp['density']
+    # d_tmp = data_tmp['density']
     pressure = -1 * np.ones(np.shape(t2[:,0,0])) * 1020 * 9.81 * z /(1e4)
     CT = gsw.CT_from_t(s2[:,0,0], t2[:,0,0], 0)
     density = gsw.rho(s2[:,0,0], CT, 0) 
     density = density - np.mean(density) #in-stu density less mean
-    d_tmp = d_tmp - np.nanmean(d_tmp)
+    print(f'density {density}')
+    # d_tmp = d_tmp - np.nanmean(d_tmp)
 plt.figure()
 plt.plot(s2[:,1,1] - 34, z, 'b', label="Sref - 34")
 plt.plot(t2[:,1,1], z, 'r', label="Tref")
 if OSX == 'Darwin':
     plt.plot(CT, z, 'r--',label="$\\theta$ref")
     plt.plot(density, z, label="∆ Density",color='xkcd:pumpkin')
-    plt.scatter(d_tmp, -z_tmp,color='xkcd:pumpkin')
+    # plt.scatter(d_tmp, -z_tmp,color='xkcd:pumpkin')
 plt.scatter(s_tmp - 34,-z_tmp,color='b')
 plt.scatter(t_tmp,-z_tmp,color='r')
 plt.legend()
@@ -901,7 +907,7 @@ if(run_config['make_icebergs']):
 
     # Barrier mask
     barrierMask[wallWidthInd:-wallWidthInd,iceStart:iceExtentIndex] = doBlock # make icebergs a physical barrier to water flow
-    barrierMask[plume_loc,icefront] = 0 #Plume code struggles with hFac adjustments
+    barrierMask[plume_loc,icefront] = 0 #Plume code struggles with hFac adjustments (no plume for this run)
 
     # Iceberg concentration (# of each surface cell that is filled in plan view)
     # bergConc[1:-1,iceStart:iceExtentIndex] = np.linspace(iceCoverage,10,(iceExtentIndex-1)) # iceberg concentration set at top
@@ -1334,7 +1340,7 @@ if(makeDirs):
         os.remove(run_config['run_dir']+'/input/setupReport.txt')
         setUpPrint('previous setupReport.txt deleted in '+ run_config['run_dir']+'/input/')
     shutil.move('setupReport.txt', run_config['run_dir']+'/input')
-    shutil.copy('finModel.py', run_config['run_dir']+'/input/buildScript.py')
+    shutil.copy('mitgcmVerify.py', run_config['run_dir']+'/input/buildScript.py')
     replaceAll(run_config['run_dir']+'/input/buildScript.py','makeDirs = True', 'makeDirs = False') 
     rcf.createSBATCHfile_Sherlock(run_config, cluster_params, walltime_hrs=1.2*comptime_hrs, email=email, mem_GB=1)
     setupNotes.close()

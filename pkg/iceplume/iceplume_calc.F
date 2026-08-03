@@ -192,8 +192,8 @@ C         Cell resolution
 C     Create variables with temperature, salinity
 C     and velocity profiles for that column
 
-	   DO K = 1,Nr
-C     Initialize to 0 to be sure
+       DO K = 1,Nr
+C      Initialize to 0 to be sure
         sProfAvg(K) = 0
         tProfAvg(K) = 0
         avgWeight = 0
@@ -203,11 +203,13 @@ C     and discharging too low
 C     hFacC only averages over content of ocean cell, so it 0-weights
 C     dry cells so it can deal with Glacier/Boundaries fine
         IF( ABS(plumeMask(I,J,bi,bj)) .GT. 1 ) THEN
-            Print *, "plumeBoxAvgR", plumeBoxAvgR
+C             Print *, "plumeBoxAvgR", plumeBoxAvgR
             DO p_i = -plumeBoxAvgR,plumeBoxAvgR
              DO p_j = -plumeBoxAvgR,plumeBoxAvgR
-                Print *, "p_i,p_j,wght", p_i,',',p_j,',',
-     &           _hFacC(I+p_i,J+p_j,K,bi,bj)
+C                 Print *, "p_i,p_j,wght", p_i,',',p_j,',',
+C      &           _hFacC(I+p_i,J+p_j,K,bi,bj)
+C               We sum hFac of the output cells, to then evenly
+C               share the discharge across these cells
                 avgWeight = avgWeight + _hFacC(I+p_i,J+p_j,K,bi,bj)
               sProfAvg(K)  = sProfAvg(K) +
      &         salt(I+p_i,J+p_j,K,bi,bj) * _hFacC(I+p_i,J+p_j,K,bi,bj)
@@ -215,7 +217,7 @@ C     dry cells so it can deal with Glacier/Boundaries fine
      &         theta(I+p_i,J+p_j,K,bi,bj) * _hFacC(I+p_i,J+p_j,K,bi,bj)
              ENDDO
             ENDDO
-            Print *, "Wght", avgWeight
+C             Print *, "Wght", avgWeight
             IF(avgWeight.EQ.0.) THEN !Tryna not throw NANs, but warn
             WRITE(msgBuf,'(2A)')
      &         'WARNING Plume in non-ocean cell [',I,',',J,']'
@@ -657,7 +659,7 @@ C Find temperature and salinity of plume outflow
             ENDDO ! water column loop
             DO k = 1,Nr
              IF ( volFluxDiff(k) .GT. 0 ) THEN !this is outflow
-              IF (k-plumeVertRampR-plumeVertRampShift .GT. 1) THEN !ensure we're not at surf
+              IF (rC(k)+plumeVertRampR+plumeVertRampShift .LT. 0) THEN !ensure we're not at surf
                DO p_k = k-plumeVertRampR-plumeVertRampShift,
      &             k+plumeVertRampR-plumeVertRampShift
 C     Here we are smearing the output over 5 cells if room.
@@ -665,6 +667,7 @@ C     Just dump in one layer if near the surface.
 C     We smear the plume outut at k but
 C     add that to the ocean at all p_k values. Only Mass gets split
 C     S,T,ptracer are volume averaged already. 
+                PRINT *, "rC, up, down", rC(p_k),drC(p_k),rC(p_k+1)
                 temp_AddMass3D(I,J,p_k,bi,bj) = tProfPlume(k)
                 salt_AddMass3D(I,J,p_k,bi,bj) = sProfPlume(k)
 #ifdef ALLOW_PTRACERS
